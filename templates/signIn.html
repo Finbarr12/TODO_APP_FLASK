@@ -17,6 +17,7 @@
         align-items: center;
         justify-content: center;
         height: 100vh;
+        flex-direction: column;
       }
       input {
         width: 98%;
@@ -38,10 +39,16 @@
     </style>
   </head>
   <body>
-    <form class="container" method="POST" action="/submit">
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, message in messages %}
+    <div class="alert alert-{{ category }}" id="flash_message">
+      {{ message }}
+    </div>
+    {% endfor %} {% endif %} {% endwith %}
+    <form class="container" method="POST" action="/signin">
       <h1>Wecome Back!!!</h1>
-      <input type="text" placeholder="Email" />
-      <input type="text" placeholder="Password" />
+      <input type="text" placeholder="Email" name="email" id="email" />
+      <input type="text" placeholder="Password" name="password" id="password" />
       <button>Sign In</button>
       <p>Don't have an account?<a href=""> Sign up</a></p>
     </form>

@@ -1,4 +1,4 @@
-from flask import Blueprint,request,flash,redirect,url_for,render_template
+from flask import Blueprint,request,flash,redirect,url_for,render_template,session
 from model.model import User
 from _init_ import db
 
@@ -31,4 +31,25 @@ def signupUser():
                 return redirect(url_for("user_bp.signupUser"))
             except ValueError as e:
                 flash(str(e),"error")
-    return render_template("signup.html")        
+    return render_template("signup.html", redirect_url = url_for("user_bp.signIn"))
+
+
+
+@user_bp.route("/signin",methods=["GET","POST"])
+def signIn():
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+
+    
+        user = User.query.filter_by(email=email).first()
+
+        if user and user.password == password:
+            session["user_id"] = user.id
+            flash("Welcome back on board", "success")
+            return render_template("signIn.html")
+        else:
+            flash("Invalid email or password", "error")
+        return render_template("signIn.html")
+    
+    return render_template("signIn.html")

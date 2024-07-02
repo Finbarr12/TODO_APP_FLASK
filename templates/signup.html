@@ -64,9 +64,15 @@
   <body>
     {% with messages = get_flashed_messages(with_categories=true) %} {% if
     messages %} {% for category, message in messages %}
-    <div class="alert alert-{{ category }}">{{ message }}</div>
+    <div class="alert alert-{{ category }}" id="flash_message">
+      {{ message }}
+    </div>
     {% endfor %} {% endif %} {% endwith %}
-    <form class="container" method="POST" action="/signup">
+    <form
+      class="container"
+      method="POST"
+      action="{{url_for('user_bp.signupUser')}}"
+    >
       <h1>Get Started</h1>
       <input type="text" placeholder="Name" name="name" id="name" />
       <input type="email" placeholder="Email" name="email" id="email" />
@@ -86,4 +92,15 @@
       <p>Already have an account?<a href=""> Sign in</a></p>
     </form>
   </body>
+  <script>
+    window.onload = function () {
+      setTimeout(() => {
+        let flash_message = document.getElementById("flash_message");
+        if (flash_message) {
+          flash_message.style.display = "none";
+          window.location.href = "{{ redirect_url }}";
+        }
+      }, 4000);
+    };
+  </script>
 </html>
